@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: flashcards
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+
+openrouter:
+  api-key: ${OPENROUTER_API_KEY:}
+  model: "typesafe/jev-1.13"
+  instructions: "Avalie semanticamente a resposta do usuário em relação à resposta correta. Considere o contexto da pergunta, identificando equivalência de significado, erros conceituais, contradições e informações incorretas."
+  criteria:
+    - "0: Resposta completamente incorreta ou sem relação com a pergunta."
+    - "25: Resposta apresenta algum conhecimento, mas contém erros conceituais importantes."
+    - "50: Resposta parcialmente correta, mas incompleta ou com imprecisões."
+    - "75: Resposta correta, mas apresenta pequenas omissões."
+    - "100: Resposta semanticamente equivalente à resposta correta."
