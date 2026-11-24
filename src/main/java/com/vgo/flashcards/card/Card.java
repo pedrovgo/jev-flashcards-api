@@ -41,6 +41,8 @@ public class Card {
 
     private Double score;
 
+    private Boolean deleted;
+
     public io.github.openspacedrepetition.Card toFsrsCard() {
         return this.fsrsId != null ? io.github.openspacedrepetition.Card.builder()
                 .cardId(this.fsrsId)

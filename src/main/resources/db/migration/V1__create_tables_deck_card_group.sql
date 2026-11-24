@@ -15,7 +15,7 @@ CREATE TABLE public.card (
 	score float8 NULL,
 	stability float8 NULL,
 	state varchar(255) NOT NULL,
-	step int4 NOT NULL,
+	step int4 NULL,
 	deck_id int8 NOT NULL,
 	CONSTRAINT card_state_check CHECK (((state)::text = ANY ((ARRAY['LEARNING'::character varying, 'REVIEW'::character varying, 'RELEARNING'::character varying])::text[]))),
 	CONSTRAINT card_deck_id_fkey FOREIGN KEY (deck_id) REFERENCES public.deck(id)

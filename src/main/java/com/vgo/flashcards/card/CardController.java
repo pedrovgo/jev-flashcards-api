@@ -14,6 +14,11 @@ public class CardController {
         this.cardService = cardService;
     }
 
+    @GetMapping(path = "/next")
+    public CardResponse getNextCard(@RequestParam Long deckId) {
+        return cardService.getNextCard(deckId);
+    }
+
     @PostMapping
     public CardResponse createCard(@RequestBody CardRequest request) {
         return cardService.createCard(request);
@@ -23,5 +28,10 @@ public class CardController {
     public CardResponse processCard(@PathVariable Long id, @RequestBody ReviewRequest request) {
         request.setCardId(id);
         return cardService.reviewFlashcard(request);
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public void deleteCard(@PathVariable Long id) {
+        cardService.deleteCard(id);
     }
 }
