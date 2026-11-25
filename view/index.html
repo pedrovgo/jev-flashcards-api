@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    >
+    <title>Jev Flashcards</title>
+</head>
+<body>
+    <main class="container">
+        <nav>
+            <ul>
+                <li><h1>Jev Flashcards</h1></li>
+            </ul>
+            <ul>
+                <li><a href="#" onclick="populateTable(SECTIONS.DECKS, 'decks', DECK_TABLE_FIELDS)" class="contrast">Decks</a></li>
+                <li><a href="#" class="contrast">Groups</a></li>
+            </ul>
+        </nav>
+        <br>
+
+        <section id="decks-section" style="display:none">
+            <h3>Decks</h3>
+            <br>
+            <div class="grid">
+                <div><button data-target="modal-dialog" onclick="toggleModal(event, DECK_MODAL_VALUES, SECTIONS.DECKS, DECK_TABLE_FIELDS)">Add</button></div>
+            </div>
+            <br>
+            <table>
+                <tbody>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="groups-section" style="display:none">
+            <h3>Groups</h3>
+        </section>
+
+        <div id="modal-container"></div>
+    </main>
+    <script src="index.js"></script>
+    <script src="dialog.js"></script>
+    <script src="decks.js"></script>
+</body>
+</html>

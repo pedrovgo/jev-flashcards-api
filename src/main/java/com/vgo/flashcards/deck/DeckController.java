@@ -2,10 +2,9 @@ package com.vgo.flashcards.deck;
 
 import com.vgo.flashcards.deck.dto.DeckRequest;
 import com.vgo.flashcards.deck.dto.DeckResponse;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/decks")
@@ -14,6 +13,11 @@ public class DeckController {
 
     public DeckController(DeckService deckService) {
         this.deckService = deckService;
+    }
+
+    @GetMapping
+    public List<DeckResponse> getDecks() {
+        return deckService.getDecks();
     }
 
     @PostMapping

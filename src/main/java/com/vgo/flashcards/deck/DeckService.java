@@ -4,12 +4,18 @@ import com.vgo.flashcards.deck.dto.DeckRequest;
 import com.vgo.flashcards.deck.dto.DeckResponse;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class DeckService {
     final DeckRepository deckRepository;
 
     public DeckService(DeckRepository deckRepository) {
         this.deckRepository = deckRepository;
+    }
+
+    public List<DeckResponse> getDecks() {
+        return deckRepository.findAll().stream().map(Deck::toResponse).toList();
     }
 
     public DeckResponse createDeck(DeckRequest request) {

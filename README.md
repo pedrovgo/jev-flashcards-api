@@ -47,6 +47,8 @@ Start the API in another terminal:
 
 The application is available at `http://localhost:8080`. Flyway applies database migrations automatically at startup.
 
+To use the web interface, start the API and open `view/index.html` in a browser. The interface currently supports listing and creating decks.
+
 To run the tests:
 
 ```bash
@@ -59,9 +61,16 @@ All endpoints accept and return JSON.
 
 | Method | Path | Description |
 |---|---|---|
+| `GET` | `/api/v1/decks` | Lists all decks |
 | `POST` | `/api/v1/decks` | Creates a deck |
 | `POST` | `/api/v1/cards` | Creates a card in a deck |
 | `POST` | `/api/v1/cards/{id}/review` | Reviews a card's answer |
+
+### List decks
+
+```bash
+curl http://localhost:8080/api/v1/decks
+```
 
 ### Create a deck
 
@@ -116,4 +125,5 @@ src/main/java/com/vgo/flashcards/
 └── openrouter/ # Semantic evaluation integration
 src/main/resources/
 └── db/migration/ # Flyway migrations
+view/              # Browser-based interface
 ```
