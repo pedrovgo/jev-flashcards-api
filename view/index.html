@@ -8,6 +8,7 @@
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
     >
+    <link rel="stylesheet" href="styles.css">
     <title>Jev Flashcards</title>
 </head>
 <body>
@@ -17,7 +18,7 @@
                 <li><h1>Jev Flashcards</h1></li>
             </ul>
             <ul>
-                <li><a href="#" onclick="populateTable(SECTIONS.DECKS, 'decks', DECK_TABLE_FIELDS)" class="contrast">Decks</a></li>
+                <li><a href="#" onclick="populateTable(SECTIONS.DECKS, DECK_TABLE_FIELDS, DECK_TABLE_ACTIONS)" class="contrast">Decks</a></li>
                 <li><a href="#" class="contrast">Groups</a></li>
             </ul>
         </nav>
@@ -27,7 +28,7 @@
             <h3>Decks</h3>
             <br>
             <div class="grid">
-                <div><button data-target="modal-dialog" onclick="toggleModal(event, DECK_MODAL_VALUES, SECTIONS.DECKS, DECK_TABLE_FIELDS)">Add</button></div>
+                <div><button data-target="modal-dialog" onclick="toggleModal(event, DECK_MODAL_VALUES, SECTIONS.DECKS, DECK_TABLE_FIELDS, DECK_TABLE_ACTIONS)">Add Deck</button></div>
             </div>
             <br>
             <table>

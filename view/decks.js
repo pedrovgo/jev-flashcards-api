@@ -1,7 +1,6 @@
 const DECK_MODAL_VALUES = {
     title: 'Add Deck',
     submitButtonText: 'Submit',
-    submitUrl: `${API_URL}/decks`,
     fields: [
         {
             label: 'Title',
@@ -14,4 +13,10 @@ const DECK_MODAL_VALUES = {
 
 const DECK_TABLE_FIELDS = {
     title: 'Deck'
+};
+
+const DECK_TABLE_ACTIONS = {
+    addCard: {
+        label: 'Add Card'
+    },
 };

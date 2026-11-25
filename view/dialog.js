@@ -36,14 +36,14 @@ const scrollbarWidthCssVar = "--pico-scrollbar-width";
 const animationDuration = 300; // ms
 let visibleModal = null;
 
-const toggleModal = (event, modalValues, sectionName, tableFields) => {
+const toggleModal = (event, modalValues, sectionName, tableFields, sectionActions) => {
     event.preventDefault();
     const modal = document.getElementById(event.currentTarget.dataset.target);
     if (!modal) return;
-    modal && (modal.open ? closeModal(modal) : openModal(modal, modalValues, sectionName, tableFields));
+    modal && (modal.open ? closeModal(modal) : openModal(modal, modalValues, sectionName, tableFields, sectionActions));
 };
 
-const openModal = (modal, modalValues, sectionName, tableFields) => {
+const openModal = (modal, modalValues, sectionName, tableFields, sectionActions) => {
     const { documentElement: html } = document;
     const scrollbarWidth = getScrollbarWidth();
     if (scrollbarWidth) {
@@ -65,9 +65,11 @@ const openModal = (modal, modalValues, sectionName, tableFields) => {
         `;
     });
 
-    form.setAttribute('action', modalValues.submitUrl);
+    form.setAttribute('action', getSectionApiUrl(sectionName));
     window.sectionValues = new WeakMap();
     window.sectionValues.set(form, {tableFields: tableFields, sectionName});
+    window.sectionActions = new WeakMap();
+    window.sectionActions.set(form, sectionActions);
 
     setTimeout(() => {
         visibleModal = modal;
@@ -105,8 +107,9 @@ const submitForm = async (event) => {
     const data = Object.fromEntries(formData.entries());
 
     const sectionValues = window.sectionValues.get(form);
+    const sectionActions = window.sectionActions.get(form);
 
-    const response = await fetch(form.getAttribute('action'), {
+    const response = await request(form.getAttribute('action'), {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -116,6 +119,7 @@ const submitForm = async (event) => {
     const result = await response.json();
     closeModal(visibleModal);
 
-    appendTable(sectionValues.sectionName, sectionValues.tableFields, result);
+    appendTable(sectionValues.sectionName, sectionValues.tableFields, result, sectionActions);
     window.sectionValues.delete(form);
+    window.sectionActions.delete(form);
 };
