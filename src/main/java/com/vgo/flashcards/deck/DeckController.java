@@ -24,4 +24,9 @@ public class DeckController {
     public DeckResponse createDeck(@RequestBody DeckRequest request) {
         return deckService.createDeck(request);
     }
+
+    @DeleteMapping("/{deckId}")
+    public void deleteDeck(@PathVariable Long deckId) {
+        deckService.deleteDeck(deckId);
+    }
 }
