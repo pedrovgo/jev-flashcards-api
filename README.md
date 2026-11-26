@@ -47,7 +47,7 @@ Start the API in another terminal:
 
 The application is available at `http://localhost:8080`. Flyway applies database migrations automatically at startup.
 
-To use the web interface, start the API and open `view/index.html` in a browser. The interface supports listing, creating, and deleting decks.
+To use the web interface, start the API and open `view/index.html` in a browser. Use **Add Deck** to open the deck-creation modal. Each deck row has **Add Card**, **Review**, and **Delete** controls. **Add Card** opens a form for the selected deck; **Review** loads its next card, submits the answer for review, and displays the score.
 
 To run the tests:
 
@@ -64,8 +64,10 @@ All endpoints accept and return JSON.
 | `GET` | `/api/v1/decks` | Lists decks that have not been deleted |
 | `POST` | `/api/v1/decks` | Creates a deck |
 | `DELETE` | `/api/v1/decks/{deckId}` | Soft-deletes a deck |
+| `GET` | `/api/v1/cards/next?deckId={deckId}` | Gets the next non-deleted card in a deck, ordered by due date |
 | `POST` | `/api/v1/cards` | Creates a card in a deck |
 | `POST` | `/api/v1/cards/{id}/review` | Reviews a card's answer |
+| `DELETE` | `/api/v1/cards/{id}` | Soft-deletes a card |
 
 ### List decks
 
@@ -104,6 +106,12 @@ curl -X POST http://localhost:8080/api/v1/cards \
   }'
 ```
 
+### Get the next card in a deck
+
+```bash
+curl 'http://localhost:8080/api/v1/cards/next?deckId=1'
+```
+
 ### Review a card
 
 Send the user's answer. The card `id` is specified in the URL path.
@@ -115,6 +123,14 @@ curl -X POST http://localhost:8080/api/v1/cards/1/review \
 ```
 
 The response includes the card data and the semantic review score (`score`).
+
+### Delete a card
+
+Card deletion is soft: the card remains in the database but is excluded from the next-card lookup.
+
+```bash
+curl -X DELETE http://localhost:8080/api/v1/cards/1
+```
 
 ### Delete a deck
 

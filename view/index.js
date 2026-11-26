@@ -2,10 +2,14 @@ const API_URL = "http://localhost:8080/api/v1";
 const ACTION_COLUMN_CLASS = 'table-action-column';
 const SECTIONS = {
     DECKS: 'decks-section',
+    CARDS: 'cards-section',
+    REVIEW: 'review-section',
     GROUPS: 'groups-section',
 };
 const SECTION_CONFIG = {
     [SECTIONS.DECKS]: { apiPath: 'decks' },
+    [SECTIONS.CARDS]: { apiPath: 'cards' },
+    [SECTIONS.REVIEW]: { apiPath: 'cards/{id}/review' },
     [SECTIONS.GROUPS]: { apiPath: 'groups' },
 };
 
@@ -98,6 +102,7 @@ const appendTableRow = (tableBody, sectionName, fields, entity, actions) => {
         button.setAttribute('aria-label', action.label);
         button.className = 'outline';
         button.textContent = action.label;
+        button.addEventListener('click', () => action.action(entity.id));
         cell.classList.add(ACTION_COLUMN_CLASS);
         cell.style.textAlign = 'center';
         cell.appendChild(button);

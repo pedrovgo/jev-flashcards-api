@@ -58,9 +58,12 @@ const openModal = (modal, modalValues, sectionName, tableFields, sectionActions)
     form.innerHTML = '';
 
     modalValues.fields.forEach(field => {
-        form.innerHTML += `
+        form.innerHTML += field.type === 'textarea' ? `
             <label for="${field.name}">${field.label}
-                <input name="${field.name}" type="${field.type}" ${field.required ? 'required' : ''} value="${field.value || ''}">
+                <textarea name="${field.name}" ${field.required ? 'required' : ''} ${field.disabled ? 'readonly' : ''}>${field.value || ''}</textarea>
+            </label>` :
+        `   <label for="${field.name}">${field.label}
+                <input name="${field.name}" type="${field.type}" ${field.required ? 'required' : ''} ${field.disabled ? 'readonly' : ''} value="${field.value || ''}">
             </label>
         `;
     });
@@ -70,6 +73,8 @@ const openModal = (modal, modalValues, sectionName, tableFields, sectionActions)
     window.sectionValues.set(form, {tableFields: tableFields, sectionName});
     window.sectionActions = new WeakMap();
     window.sectionActions.set(form, sectionActions);
+    window.modalValues = new WeakMap();
+    window.modalValues.set(form, modalValues);
 
     setTimeout(() => {
         visibleModal = modal;
@@ -108,8 +113,11 @@ const submitForm = async (event) => {
 
     const sectionValues = window.sectionValues.get(form);
     const sectionActions = window.sectionActions.get(form);
+    const modalValues = window.modalValues.get(form);
+    const url = form.getAttribute('action');
+    const id = form.elements.namedItem('id')?.value;
 
-    const response = await request(form.getAttribute('action'), {
+    const response = await request(id ? url.replace('{id}', id) : url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -119,7 +127,15 @@ const submitForm = async (event) => {
     const result = await response.json();
     closeModal(visibleModal);
 
-    appendTable(sectionValues.sectionName, sectionValues.tableFields, result, sectionActions);
+    if (sectionValues.tableFields) {
+        appendTable(sectionValues.sectionName, sectionValues.tableFields, result, sectionActions);
+    } else if (modalValues.onSuccess) {
+        modalValues.onSuccess({...result, ...modalValues.onSuccessData});
+    } else {
+        alert('Success! Form submitted successfully.');
+    }
+
     window.sectionValues.delete(form);
     window.sectionActions.delete(form);
+    window.modalValues.delete(form);
 };
