@@ -29,16 +29,24 @@ public class CardService {
 
     public CardResponse createCard(CardRequest cardRequest) {
         final Card card = new Card();
-        final io.github.openspacedrepetition.Card fsrsCard = card.toFsrsCard();
-
-        card.updateFromFsrsCard(fsrsCard);
         card.setDeck(Deck.builder().id(cardRequest.getDeckId()).build());
         card.setQuestion(cardRequest.getQuestion());
         card.setAnswer(cardRequest.getAnswer());
         card.setDeleted(false);
 
+        return resetAndSaveCard(card).toResponse();
+    }
+
+    private Card resetAndSaveCard(Card card) {
+        card.setFsrsId(null);
+        card.updateFromFsrsCard(card.toFsrsCard());
         cardRepository.save(card);
-        return card.toResponse();
+        return card;
+    }
+
+    @Transactional
+    public void resetCards(Long deckId) {
+        cardRepository.findAllByDeckIdAndDeletedFalse(deckId).forEach(this::resetAndSaveCard);
     }
 
     public CardResponse reviewFlashcard(ReviewRequest reviewRequest) {

@@ -72,6 +72,7 @@ public class Card {
         this.difficulty = fsrsCard.getDifficulty();
         this.due = fsrsCard.getDue();
         this.lastReview = fsrsCard.getLastReview();
+        this.score = null;
         return this;
     }
 }

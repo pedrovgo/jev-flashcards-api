@@ -47,7 +47,7 @@ Start the API in another terminal:
 
 The application is available at `http://localhost:8080`. Flyway applies database migrations automatically at startup.
 
-To use the web interface, start the API and open `view/index.html` in a browser. Use **Add Deck** to open the deck-creation modal. Each deck row has **Add Card**, **Review**, and **Delete** controls. **Add Card** opens a form for the selected deck; **Review** loads its next card, submits the answer for review, and displays the score and saved answer.
+To use the web interface, start the API and open `view/index.html` in a browser. Use **Add Deck** to open the deck-creation modal. Each deck row has **Add Card**, **Review**, and **Delete** controls. **Add Card** opens a form for the selected deck; **Review** loads its next card and opens a form for the answer. After submission, a result dialog displays the score and saved answer. Closing the result dialog loads the next card in that deck.
 
 To run the tests:
 
@@ -63,6 +63,7 @@ All endpoints accept and return JSON.
 |---|---|---|
 | `GET` | `/api/v1/decks` | Lists decks that have not been deleted |
 | `POST` | `/api/v1/decks` | Creates a deck |
+| `POST` | `/api/v1/decks/{deckId}/reset` | Resets the review state of active cards in a deck |
 | `DELETE` | `/api/v1/decks/{deckId}` | Soft-deletes a deck |
 | `GET` | `/api/v1/cards/next?deckId={deckId}` | Gets the next non-deleted card in a deck, ordered by due date |
 | `POST` | `/api/v1/cards` | Creates a card in a deck |
@@ -122,7 +123,7 @@ curl -X POST http://localhost:8080/api/v1/cards/1/review \
   -d '{"answer":"The cell"}'
 ```
 
-The response includes the card data and the semantic review score (`score`). The browser interface displays the score together with the card's saved answer after review.
+The response includes the card data and the semantic review score (`score`). In the browser interface, the review result is shown in a dialog with the score and the card's saved answer.
 
 ### Delete a card
 
@@ -138,6 +139,14 @@ Deck deletion is soft: the deck is hidden from `GET /api/v1/decks` but remains i
 
 ```bash
 curl -X DELETE http://localhost:8080/api/v1/decks/1
+```
+
+### Reset a deck
+
+Resetting a deck returns all non-deleted cards to their initial FSRS review state and clears their previous review scores. Card questions and answers are preserved.
+
+```bash
+curl -X POST http://localhost:8080/api/v1/decks/1/reset
 ```
 
 Deck titles do not need to be unique.

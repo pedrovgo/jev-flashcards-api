@@ -25,6 +25,11 @@ public class DeckController {
         return deckService.createDeck(request);
     }
 
+    @PostMapping("/{deckId}/reset")
+    public void resetDeck(@PathVariable Long deckId) {
+        deckService.resetDeck(deckId);
+    }
+
     @DeleteMapping("/{deckId}")
     public void deleteDeck(@PathVariable Long deckId) {
         deckService.deleteDeck(deckId);
