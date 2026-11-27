@@ -1,6 +1,6 @@
 # Flashcards API
 
-A REST API for creating decks and flashcards, and reviewing answers with spaced repetition (FSRS). During a review, the answer is evaluated semantically by the model configured in OpenRouter; the resulting score determines the rating used by FSRS.
+A REST API for creating decks and flashcards, and reviewing answers with spaced repetition (FSRS). During a review, the model configured in OpenRouter compares the user's answer with the saved answer by meaning, considering key concepts and factual correctness rather than exact wording. Paraphrases and omissions that do not change the meaning should not be penalized. The resulting score determines the rating used by FSRS.
 
 ## Technologies
 
@@ -47,7 +47,7 @@ Start the API in another terminal:
 
 The application is available at `http://localhost:8080`. Flyway applies database migrations automatically at startup.
 
-To use the web interface, start the API and open `view/index.html` in a browser. Use **Add Deck** to open the deck-creation modal. Each deck row has **Add Card**, **Review**, and **Delete** controls. **Add Card** opens a form for the selected deck; **Review** loads its next card, submits the answer for review, and displays the score.
+To use the web interface, start the API and open `view/index.html` in a browser. Use **Add Deck** to open the deck-creation modal. Each deck row has **Add Card**, **Review**, and **Delete** controls. **Add Card** opens a form for the selected deck; **Review** loads its next card, submits the answer for review, and displays the score and saved answer.
 
 To run the tests:
 
@@ -122,7 +122,7 @@ curl -X POST http://localhost:8080/api/v1/cards/1/review \
   -d '{"answer":"The cell"}'
 ```
 
-The response includes the card data and the semantic review score (`score`).
+The response includes the card data and the semantic review score (`score`). The browser interface displays the score together with the card's saved answer after review.
 
 ### Delete a card
 

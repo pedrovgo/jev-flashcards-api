@@ -25,7 +25,7 @@ public class CardController {
     }
 
     @PostMapping(path = "/{id}/review")
-    public CardResponse processCard(@PathVariable Long id, @RequestBody ReviewRequest request) {
+    public CardResponse reviewFlashcard(@PathVariable Long id, @RequestBody ReviewRequest request) {
         request.setCardId(id);
         return cardService.reviewFlashcard(request);
     }

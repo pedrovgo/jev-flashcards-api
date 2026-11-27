@@ -28,7 +28,7 @@ const REVIEW_MODAL_VALUES = {
     title: 'Review Card',
     submitButtonText: 'Submit',
     onSuccess: (review) => {
-        alert(`Card reviewed. Score: ${review.score}`);
+        alert(`Card reviewed.\nScore: ${review.score}\nAnswer: ${review.answer}`);
         DECK_TABLE_ACTIONS.reviewDeck.action(review.deckId);
     },
     fields: [

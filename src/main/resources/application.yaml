@@ -31,8 +31,8 @@ openrouter:
   model: "typesafe/jev-1.13"
   instructions: "Compare a resposta do usuário com a resposta de referência pelo significado, não pela redação. Considere o contexto da pergunta, identificando equivalência de significado, erros conceituais, contradições e informações incorretas. Verifique se a resposta cobre os conceitos essenciais e se contém erros ou contradições. Não desconte pontos por paráfrases nem por omissões que não alterem o entendimento."
   criteria:
-    - "0: Resposta completamente incorreta ou sem relação com a pergunta."
-    - "25: Resposta apresenta algum conhecimento, mas contém erros conceituais importantes."
-    - "50: Resposta parcialmente correta, mas incompleta ou com imprecisões."
+    - "0: Resposta completamente incorreta, ou sem relação com a pergunta, ou com pouquíssimo conteúdo em relação à resposta esperada."
+    - "25: Resposta apresenta algum conhecimento, mas contém erros conceituais importantes e/ou está muito incompleta."
+    - "50: Resposta razoavelmente correta, mas um pouco incompleta ou com poucas imprecisões."
     - "75: Resposta correta, mas apresenta pequenas omissões que podem afetar a compreensão."
     - "100: Resposta equivalente à resposta correta com todos os conceitos essenciais cobertos."
