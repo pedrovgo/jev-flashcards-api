@@ -28,8 +28,33 @@ const REVIEW_MODAL_VALUES = {
     title: 'Review Card',
     submitButtonText: 'Submit',
     onSuccess: (review) => {
-        alert(`Card reviewed.\nScore: ${review.score}\nAnswer: ${review.answer}`);
-        DECK_TABLE_ACTIONS.reviewDeck.action(review.deckId);
+        document.getElementById("alert-container").innerHTML = `
+        <dialog id="alert-dialog">
+            <article>
+                <header>
+                    <button
+                            aria-label="Close"
+                            rel="prev"
+                            data-target="alert-dialog"
+                            onclick="REVIEW_MODAL_VALUES.onAlertClose(${review.deckId})"
+                    ></button>
+                    <p>
+                        <strong>Card reviewed.</strong>
+                    </p>
+                </header>
+                <h3>Score: ${review.score}</h3><br>
+                <h5>Answer:<br><br> ${review.answer}</h5>
+            </article>
+        </dialog>`;
+        const modal = document.getElementById('alert-dialog');
+        openModal(modal, {}, SECTIONS.REVIEW, null, null);
+    },
+    onAlertClose: (deckId) => {
+        const modal = document.getElementById('alert-dialog');
+        closeModal(modal);
+        setTimeout(() => {
+            DECK_TABLE_ACTIONS.reviewDeck.action(deckId);
+        }, animationDuration);
     },
     fields: [
         {

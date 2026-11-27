@@ -52,29 +52,35 @@ const openModal = (modal, modalValues, sectionName, tableFields, sectionActions)
     html.classList.add(isOpenClass, openingClass);
 
     modal.querySelector('header p strong').textContent = modalValues.title;
-    modal.querySelector('footer .primary').textContent = modalValues.submitButtonText;
+
+    let submitButton = modal.querySelector('footer .primary');
+    if (submitButton) {
+        submitButton.textContent = modalValues.submitButtonText;
+    }
 
     const form = modal.querySelector('form');
-    form.innerHTML = '';
+    if (form) {
+        form.innerHTML = '';
 
-    modalValues.fields.forEach(field => {
-        form.innerHTML += field.type === 'textarea' ? `
-            <label for="${field.name}">${field.label}
-                <textarea name="${field.name}" ${field.required ? 'required' : ''} ${field.disabled ? 'readonly' : ''}>${field.value || ''}</textarea>
-            </label>` :
-        `   <label for="${field.name}">${field.label}
-                <input name="${field.name}" type="${field.type}" ${field.required ? 'required' : ''} ${field.disabled ? 'readonly' : ''} value="${field.value || ''}">
-            </label>
-        `;
-    });
+        modalValues.fields.forEach(field => {
+            form.innerHTML += field.type === 'textarea' ? `
+                <label for="${field.name}">${field.label}
+                    <textarea name="${field.name}" ${field.required ? 'required' : ''} ${field.disabled ? 'readonly' : ''}>${field.value || ''}</textarea>
+                </label>` :
+            `   <label for="${field.name}">${field.label}
+                    <input name="${field.name}" type="${field.type}" ${field.required ? 'required' : ''} ${field.disabled ? 'readonly' : ''} value="${field.value || ''}">
+                </label>
+            `;
+        });
 
-    form.setAttribute('action', getSectionApiUrl(sectionName));
-    window.sectionValues = new WeakMap();
-    window.sectionValues.set(form, {tableFields: tableFields, sectionName});
-    window.sectionActions = new WeakMap();
-    window.sectionActions.set(form, sectionActions);
-    window.modalValues = new WeakMap();
-    window.modalValues.set(form, modalValues);
+        form.setAttribute('action', getSectionApiUrl(sectionName));
+        window.sectionValues = new WeakMap();
+        window.sectionValues.set(form, {tableFields: tableFields, sectionName});
+        window.sectionActions = new WeakMap();
+        window.sectionActions.set(form, sectionActions);
+        window.modalValues = new WeakMap();
+        window.modalValues.set(form, modalValues);
+    }
 
     setTimeout(() => {
         visibleModal = modal;
@@ -127,13 +133,15 @@ const submitForm = async (event) => {
     const result = await response.json();
     closeModal(visibleModal);
 
-    if (sectionValues.tableFields) {
-        appendTable(sectionValues.sectionName, sectionValues.tableFields, result, sectionActions);
-    } else if (modalValues.onSuccess) {
-        modalValues.onSuccess({...result, ...modalValues.onSuccessData});
-    } else {
-        alert('Success! Form submitted successfully.');
-    }
+    setTimeout(() => {
+        if (sectionValues.tableFields) {
+            appendTable(sectionValues.sectionName, sectionValues.tableFields, result, sectionActions);
+        } else if (modalValues.onSuccess) {
+            modalValues.onSuccess({...result, ...modalValues.onSuccessData});
+        } else {
+            alert('Success! Form submitted successfully.');
+        }
+    }, animationDuration);
 
     window.sectionValues.delete(form);
     window.sectionActions.delete(form);
